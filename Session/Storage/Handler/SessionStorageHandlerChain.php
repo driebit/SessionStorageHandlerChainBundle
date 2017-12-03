@@ -43,13 +43,10 @@ class SessionStorageHandlerChain implements \SessionHandlerInterface
     public function open($savePath, $sessionName)
     {
         foreach ($this->readStorageChain as $storage) {
-            $result = $storage->open($savePath, $sessionName);
-            if ($result) {
-                return true;
-            }
+            $storage->open($savePath, $sessionName);
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -63,7 +60,7 @@ class SessionStorageHandlerChain implements \SessionHandlerInterface
             $result |= $storage->close();
         }
 
-        return $result;
+        return (bool) $result;
     }
 
     /**
